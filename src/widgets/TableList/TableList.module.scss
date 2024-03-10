@@ -1,0 +1,8 @@
+.TableList{
+    display: flex;
+    justify-content: center;
+    color: var(--font-color-table);
+}
+th, td{
+    color: var(--font-color-table) !important;
+}

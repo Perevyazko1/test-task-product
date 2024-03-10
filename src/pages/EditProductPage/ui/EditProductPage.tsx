@@ -1,5 +1,6 @@
 import {memo, ReactNode} from 'react';
 import {classNames, Mods} from "shared/lib/classNames/classNames";
+import {PageWrapper} from "../../../shared/ui/PageWrapper/PageWrapper";
 
 interface CreateProductPageProps {
     className?: string
@@ -19,13 +20,15 @@ const EditProductPage = memo((props: CreateProductPageProps) => {
     };
 
     return (
-        <div
-            className={classNames('', mods, [className])}
-            {...otherProps}
-        >
-            {children}
-            Эдит
-        </div>
+        <PageWrapper>
+            <div
+                className={classNames('', mods, [className])}
+                {...otherProps}
+            >
+                {children}
+                Эдит
+            </div>
+        </PageWrapper>
     );
 });
 export default EditProductPage

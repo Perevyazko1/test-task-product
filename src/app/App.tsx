@@ -13,9 +13,9 @@ function App() {
             <Route path={"/edit_product"} element={<EditProductPage/>}/>
         </Routes>
 
-        <Link to="/">Главная</Link>
-        <Link to="/create_product">Создать</Link>
-        <Link to="/edit_product">Переименовать</Link>
+        {/*<Link to="/">Главная</Link>*/}
+        {/*<Link to="/create_product">Создать</Link>*/}
+        {/*<Link to="/edit_product">Переименовать</Link>*/}
     </>
   );
 }
