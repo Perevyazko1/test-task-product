@@ -1,6 +1,9 @@
 import {memo, ReactNode} from 'react';
 import {classNames, Mods} from "shared/lib/classNames/classNames";
 import {PageWrapper} from "../../../shared/ui/PageWrapper/PageWrapper";
+import {Button} from "react-bootstrap";
+import {FormInputProduct} from "../../../shared/ui/FormInputProduct/FormInputProduct";
+import cls from "./EditProductPage.module.scss"
 
 interface CreateProductPageProps {
     className?: string
@@ -22,11 +25,13 @@ const EditProductPage = memo((props: CreateProductPageProps) => {
     return (
         <PageWrapper>
             <div
-                className={classNames('', mods, [className])}
+                className={classNames(cls.EditProductPage, mods, [className])}
                 {...otherProps}
             >
-                {children}
-                Эдит
+                <FormInputProduct header={"Редактирование типа продукции"}>
+                    <Button className={classNames(cls.button,{},["mx-5"])} >Создать</Button>
+                    <Button className="mx-5" variant="dark">Отмена</Button>
+                </FormInputProduct>
             </div>
         </PageWrapper>
     );
