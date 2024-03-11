@@ -1,6 +1,8 @@
-import {memo, ReactNode, useEffect} from 'react';
+import {memo, ReactNode, useEffect, useState} from 'react';
 import {classNames, Mods} from "shared/lib/classNames/classNames";
 import question from 'shared/icons/question.svg'
+import pencil from "shared/icons/pencil.webp"
+import delete_icon from "shared/icons/delete.png"
 import {Table} from "react-bootstrap";
 import cls from "./TableList.module.scss"
 import {postApi} from "../../providers/api/RtkService";
@@ -8,6 +10,8 @@ import {useAppdispatch, useAppSelector} from "../../shared/lib/hooks/Redux/redux
 import {ProductTypesSlice} from "../../providers/api/slice/ProductTypesSlice";
 import {ProductTypes} from "../../providers/api/models/ProductTypes";
 import moment from "moment";
+import {useNavigate} from "react-router-dom";
+import {Confirmation} from "../../shared/ui/Confirmation/Confirmation";
 
 
 interface TableProps {
@@ -21,8 +25,10 @@ export const TableList = memo((props: TableProps) => {
     const {data, isLoading, error} = postApi.useGetDataQuery({param: "", source: "productTypes"});
     const dispatch = useAppdispatch()
     const {isProductType} = ProductTypesSlice.actions
+    const navigate = useNavigate()
+    const [showModal, setShowModal] = useState(false)
 
-    const product =useAppSelector(state => state.ProductTypesSlice)
+    const product = useAppSelector(state => state.ProductTypesSlice)
     useEffect(() => {
         console.log(product)
     }, [product]);
@@ -31,6 +37,13 @@ export const TableList = memo((props: TableProps) => {
         console.log(data)
         data && dispatch(isProductType(data))
     }, [data]);
+    const handleConConfirmDelete = () => {
+        const {data, isLoading, error} = postApi.useGetDataQuery({param: "", source: "productTypes"});
+    }
+    const handleCloseModal = () => {
+        setShowModal(false)
+    }
+
 
     const {
         className,
@@ -61,7 +74,7 @@ export const TableList = memo((props: TableProps) => {
                 </tr>
                 </thead>
                 <tbody>
-                {product && product
+                {data && data
                     .slice() // Создаем копию массива, чтобы избежать изменения исходных данных
                     .sort((a, b) => moment(b.createdAt).diff(moment(a.createdAt))) // Сортируем скопированный массив по дате создания
                     .map((item: ProductTypes, i) => (
@@ -72,10 +85,16 @@ export const TableList = memo((props: TableProps) => {
                             <td>{moment(item.createdAt).format("DD.MM.YYYY")}</td>
                             <td>{item.isArchived ? 'Архив' : 'Активно'}</td>
                             <td><img src={question} alt="question"/></td>
-                            <td> </td>
+                            <td>
+                                <img className={cls.pencil} onClick={() => navigate(`/edit_product`)} src={pencil}/>
+                                <img className={cls.delete} onClick={()=>setShowModal(true)} src={delete_icon}/>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
-            </Table></div>
+            </Table>
+            <Confirmation show={showModal} onHide={handleCloseModal} conConfirm={handleConConfirmDelete}/>
+        </div>
+
     );
 });
