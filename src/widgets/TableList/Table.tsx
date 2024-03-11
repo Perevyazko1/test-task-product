@@ -12,6 +12,7 @@ import {ProductTypes} from "../../providers/api/models/ProductTypes";
 import moment from "moment";
 import {useNavigate} from "react-router-dom";
 import {Confirmation} from "../../shared/ui/Confirmation/Confirmation";
+import {ModalTooltype} from "../../shared/ui/ModalTooltype/ModalTooltype";
 
 
 interface TableProps {
@@ -26,6 +27,7 @@ export const TableList = memo((props: TableProps) => {
     const dispatch = useAppdispatch()
     const {isProductType} = ProductTypesSlice.actions
     const navigate = useNavigate()
+    const [showModalConfirm, setShowModalConfirm] = useState(false)
     const [showModal, setShowModal] = useState(false)
 
     const product = useAppSelector(state => state.ProductTypesSlice)
@@ -39,6 +41,9 @@ export const TableList = memo((props: TableProps) => {
     }, [data]);
     const handleConConfirmDelete = () => {
         const {data, isLoading, error} = postApi.useGetDataQuery({param: "", source: "productTypes"});
+    }
+    const handleCloseModalConfirm = () => {
+        setShowModal(false)
     }
     const handleCloseModal = () => {
         setShowModal(false)
@@ -84,16 +89,30 @@ export const TableList = memo((props: TableProps) => {
                             <td>{item.packageType}</td>
                             <td>{moment(item.createdAt).format("DD.MM.YYYY")}</td>
                             <td>{item.isArchived ? 'Архив' : 'Активно'}</td>
-                            <td><img src={question} alt="question"/></td>
+                            <td><img src={question}
+                                     alt="question"
+                                     onClick={()=>setShowModal(true)}
+                            /></td>
                             <td>
                                 <img className={cls.pencil} onClick={() => navigate(`/edit_product`)} src={pencil}/>
-                                <img className={cls.delete} onClick={()=>setShowModal(true)} src={delete_icon}/>
+                                <img className={cls.delete} onClick={()=>setShowModalConfirm(true)} src={delete_icon}/>
                             </td>
+                            <ModalTooltype
+                                show={showModal}
+                                onHide={handleCloseModal}
+                            >
+                                <p>{item.packsNumber}</p>
+                                <p>{item.packageType}</p>
+                                <p>{item.isArchived}</p>
+                                <p>{item.description}</p>
+                                <p>{item.createdAt}</p>
+                            </ModalTooltype>
                         </tr>
+
                     ))}
                 </tbody>
             </Table>
-            <Confirmation show={showModal} onHide={handleCloseModal} conConfirm={handleConConfirmDelete}/>
+            <Confirmation show={showModalConfirm} onHide={handleCloseModalConfirm} conConfirm={handleConConfirmDelete}/>
         </div>
 
     );

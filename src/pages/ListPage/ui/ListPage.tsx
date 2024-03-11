@@ -7,6 +7,7 @@ import {Button} from "react-bootstrap";
 import {postApi} from "../../../providers/api/RtkService";
 import {useAppdispatch} from "../../../shared/lib/hooks/Redux/redux";
 import {ProductTypesSlice} from "../../../providers/api/slice/ProductTypesSlice";
+import {useNavigate} from "react-router-dom";
 
 interface ListPageProps {
     className?: string
@@ -15,6 +16,8 @@ interface ListPageProps {
 
 
 const ListPage = memo((props: ListPageProps) => {
+    const navigate = useNavigate()
+
 
     const {
         className,
@@ -33,7 +36,8 @@ const ListPage = memo((props: ListPageProps) => {
             >
                 <div className={cls.headerBlock}>
                     <div className={cls.header}>Список выпускаемой продукции</div>
-                    <Button className={cls.button}>Создать тип продукции</Button>
+                    <Button className={cls.button} onClick={() => navigate(`/create_product`)}>Создать тип
+                        продукции</Button>
 
                 </div>
                 <TableList/>
