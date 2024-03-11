@@ -43,7 +43,7 @@ export const TableList = memo((props: TableProps) => {
         const {data, isLoading, error} = postApi.useGetDataQuery({param: "", source: "productTypes"});
     }
     const handleCloseModalConfirm = () => {
-        setShowModal(false)
+        setShowModalConfirm(false)
     }
     const handleCloseModal = () => {
         setShowModal(false)

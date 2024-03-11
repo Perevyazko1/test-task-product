@@ -34,7 +34,7 @@ export const Confirmation = memo((props: ConfirmationProps) => {
                 <Modal.Header closeButton>
                     <Modal.Title>Подтверждение удаления</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Вы уверены, что хотите удалить элемент?</Modal.Body>
+                <Modal.Body>Вы уверены, что хотите удалить данные?</Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={onHide}>
                         Нет

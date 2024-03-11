@@ -1,10 +1,11 @@
-import {memo, ReactNode} from 'react';
+import {memo, ReactNode, useState} from 'react';
 import {classNames, Mods} from "shared/lib/classNames/classNames";
 import {PageWrapper} from "../../../shared/ui/PageWrapper/PageWrapper";
 import {FormInputProduct} from "../../../shared/ui/FormInputProduct/FormInputProduct";
 import cls from "./CreateProductPage.module.scss"
 import {Button} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
+import {Confirmation} from "../../../shared/ui/Confirmation/Confirmation";
 
 
 interface CreateProductPageProps {
@@ -15,6 +16,15 @@ interface CreateProductPageProps {
 
 const CreateProductPage = memo((props: CreateProductPageProps) => {
     const navigate = useNavigate()
+    const [showModalConfirm, setShowModalConfirm] = useState(false)
+    const handleConConfirmDelete = () => {
+        navigate(`/`)
+    }
+    const handleCloseModalConfirm = () => {
+        setShowModalConfirm(false)
+        navigate(`/`)
+    }
+
     const {
         className,
         children,
@@ -30,16 +40,27 @@ const CreateProductPage = memo((props: CreateProductPageProps) => {
                 {...otherProps}
             >
                 <FormInputProduct header={"Создание типа продукции"}>
-                    <Button className="mr-5" variant="danger">Удалить</Button>
+                    <Button
+                        className="mr-5"
+                        variant="danger"
+                        onClick={() => setShowModalConfirm(true)}
+                    >Удалить
+                    </Button>
                     <Button
                         className="mx-5"
                         variant="dark"
                         onClick={() => navigate(`/`)}
                     >Отмена
                     </Button>
-                    <Button className={cls.button}>Сохранить</Button>
+                    <Button
+                        className={cls.button}
+                        onClick={() => navigate(`/`)}
+                    >Сохранить
+                    </Button>
                 </FormInputProduct>
             </div>
+            <Confirmation show={showModalConfirm} onHide={handleCloseModalConfirm} conConfirm={handleConConfirmDelete}/>
+
         </PageWrapper>
     );
 });
