@@ -17,7 +17,7 @@ export const ProductTypesSlice = createSlice({
     initialState,
     reducers: {
         isProductType(state, action: PayloadAction<ProductTypes[]>) {
-            state = action.payload.map((item) => item);
+            state = action.payload
             console.log(state)
         },
 
