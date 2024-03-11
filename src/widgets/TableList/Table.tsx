@@ -1,8 +1,13 @@
-import {memo, ReactNode} from 'react';
+import {memo, ReactNode, useEffect} from 'react';
 import {classNames, Mods} from "shared/lib/classNames/classNames";
 import question from 'shared/icons/question.svg'
 import {Table} from "react-bootstrap";
 import cls from "./TableList.module.scss"
+import {postApi} from "../../providers/api/RtkService";
+import {useAppdispatch, useAppSelector} from "../../shared/lib/hooks/Redux/redux";
+import {ProductTypesSlice} from "../../providers/api/slice/ProductTypesSlice";
+import {ProductTypes} from "../../providers/api/models/ProductTypes";
+import moment from "moment";
 
 
 interface TableProps {
@@ -12,6 +17,21 @@ interface TableProps {
 
 
 export const TableList = memo((props: TableProps) => {
+
+    const {data, isLoading, error} = postApi.useGetDataQuery({param: "", source: "productTypes"});
+    const dispatch = useAppdispatch()
+    const {isProductType} = ProductTypesSlice.actions
+
+    const product =useAppSelector(state => state.ProductTypesSlice)
+    useEffect(() => {
+        console.log(product)
+    }, [product]);
+
+    useEffect(() => {
+        console.log(data)
+        data && dispatch(isProductType(data))
+    }, [data]);
+
     const {
         className,
         children,
@@ -41,15 +61,20 @@ export const TableList = memo((props: TableProps) => {
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>20</td>
-                    <td>компрессия</td>
-                    <td>01.02.2024</td>
-                    <td>Активно</td>
-                    <td><img src={question} alt="question"/></td>
-                    <td> </td>
-                </tr>
+                {product && product
+                    .slice() // Создаем копию массива, чтобы избежать изменения исходных данных
+                    .sort((a, b) => moment(b.createdAt).diff(moment(a.createdAt))) // Сортируем скопированный массив по дате создания
+                    .map((item: ProductTypes, i) => (
+                        <tr key={item.id}>
+                            <td>{i + 1}</td>
+                            <td>{item.packsNumber}</td>
+                            <td>{item.packageType}</td>
+                            <td>{moment(item.createdAt).format("DD.MM.YYYY")}</td>
+                            <td>{item.isArchived ? 'Архив' : 'Активно'}</td>
+                            <td><img src={question} alt="question"/></td>
+                            <td> </td>
+                        </tr>
+                    ))}
                 </tbody>
             </Table></div>
     );

@@ -1,9 +1,12 @@
-import {memo, ReactNode} from 'react';
+import {memo, ReactNode, useEffect} from 'react';
 import cls from "./ListPage.module.scss"
 import {classNames, Mods} from "shared/lib/classNames/classNames";
 import {PageWrapper} from "../../../shared/ui/PageWrapper/PageWrapper";
 import {TableList} from "../../../widgets/TableList/Table";
 import {Button} from "react-bootstrap";
+import {postApi} from "../../../providers/api/RtkService";
+import {useAppdispatch} from "../../../shared/lib/hooks/Redux/redux";
+import {ProductTypesSlice} from "../../../providers/api/slice/ProductTypesSlice";
 
 interface ListPageProps {
     className?: string
@@ -12,6 +15,7 @@ interface ListPageProps {
 
 
 const ListPage = memo((props: ListPageProps) => {
+
     const {
         className,
         children,
@@ -19,6 +23,7 @@ const ListPage = memo((props: ListPageProps) => {
     } = props
 
     const mods: Mods = {};
+
 
     return (
         <PageWrapper>
