@@ -31,9 +31,6 @@ export const TableList = memo((props: TableProps) => {
     const [showModal, setShowModal] = useState(false)
 
     const product = useAppSelector(state => state.ProductTypesSlice)
-    useEffect(() => {
-        console.log(product)
-    }, [product]);
 
     useEffect(() => {
         data && dispatch(isProductType(data))
@@ -93,7 +90,7 @@ export const TableList = memo((props: TableProps) => {
                                      onClick={()=>setShowModal(true)}
                             /></td>
                             <td>
-                                <img className={cls.pencil} onClick={() => navigate(`/edit_product`)} src={pencil}/>
+                                <img className={cls.pencil} onClick={() => navigate(`/edit_product/${item.id}`)} src={pencil}/>
                                 <img className={cls.delete} onClick={()=>setShowModalConfirm(true)} src={delete_icon}/>
                             </td>
                             <ModalTooltype

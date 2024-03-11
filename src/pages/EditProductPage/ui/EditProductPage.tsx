@@ -1,12 +1,14 @@
-import {memo, ReactNode, useState} from 'react';
+import {memo, ReactNode, useEffect} from 'react';
 import {classNames, Mods} from "shared/lib/classNames/classNames";
 import {PageWrapper} from "../../../shared/ui/PageWrapper/PageWrapper";
 import {Button} from "react-bootstrap";
 import {FormInputProduct} from "../../../shared/ui/FormInputProduct/FormInputProduct";
 import cls from "./EditProductPage.module.scss"
-import {useNavigate} from "react-router-dom";
-import {Confirmation} from "../../../shared/ui/Confirmation/Confirmation";
+import {useNavigate, useParams} from "react-router-dom";
 import {postApi} from "../../../providers/api/RtkService";
+import {typesEdit, TypesEditSlice} from "../../../providers/api/slice/TypesEditSlice";
+import {useAppdispatch, useAppSelector} from "../../../shared/lib/hooks/Redux/redux";
+import {ProductTypes} from "../../../providers/api/models/ProductTypes";
 
 interface CreateProductPageProps {
     className?: string
@@ -16,6 +18,16 @@ interface CreateProductPageProps {
 
 const EditProductPage = memo((props: CreateProductPageProps) => {
     const navigate = useNavigate()
+        const dispatch = useAppdispatch()
+        const product = useAppSelector(state => state.TypesEditSlice)
+
+
+
+        const {id} = useParams()
+    const {data, isLoading, error} = postApi.useGetUnitQuery({param: "", source: `productTypes/${id}`});
+    useEffect(() => {
+        data && dispatch(typesEdit(data))
+    }, [data]);
 
 
     const {
@@ -32,7 +44,7 @@ const EditProductPage = memo((props: CreateProductPageProps) => {
                 className={classNames(cls.EditProductPage, mods, [className])}
                 {...otherProps}
             >
-                <FormInputProduct header={"Редактирование типа продукции"}>
+                <FormInputProduct data={product} header={"Редактирование типа продукции"}>
                     <Button
                         className={classNames(cls.button, {}, ["mx-5"])}
                         onClick={() => navigate(`/`)}

@@ -10,7 +10,7 @@ function App() {
         <Routes>
             <Route path={"/"} element={<ListPage/>}/>
             <Route path={"/create_product"} element={<CreateProductPage/>}/>
-            <Route path={"/edit_product"} element={<EditProductPage/>}/>
+            <Route path={"/edit_product/:id"} element={<EditProductPage/>}/>
         </Routes>
     </>
   );

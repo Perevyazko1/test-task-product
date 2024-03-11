@@ -1,4 +1,4 @@
-import {memo, ReactNode, useState} from 'react';
+import {memo, ReactNode, useEffect, useState} from 'react';
 import {classNames, Mods} from "shared/lib/classNames/classNames";
 import {PageWrapper} from "../../../shared/ui/PageWrapper/PageWrapper";
 import {FormInputProduct} from "../../../shared/ui/FormInputProduct/FormInputProduct";
@@ -6,6 +6,7 @@ import cls from "./CreateProductPage.module.scss"
 import {Button} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
 import {Confirmation} from "../../../shared/ui/Confirmation/Confirmation";
+import {useAppSelector} from "../../../shared/lib/hooks/Redux/redux";
 
 
 interface CreateProductPageProps {
@@ -17,6 +18,9 @@ interface CreateProductPageProps {
 const CreateProductPage = memo((props: CreateProductPageProps) => {
     const navigate = useNavigate()
     const [showModalConfirm, setShowModalConfirm] = useState(false)
+    const product = useAppSelector(state => state.TypesEditSlice)
+    const [disableButton, setDisableButton] = useState(true)
+
     const handleConConfirmDelete = () => {
         navigate(`/`)
     }
@@ -24,6 +28,14 @@ const CreateProductPage = memo((props: CreateProductPageProps) => {
         setShowModalConfirm(false)
         navigate(`/`)
     }
+    useEffect(() => {
+        console.log(product.product.packsNumber)
+        if (product.product.packsNumber === 0) {
+            setDisableButton(true)
+        } else {
+            setDisableButton(false)
+        }
+    }, [product.product.packsNumber]);
 
     const {
         className,
@@ -55,6 +67,7 @@ const CreateProductPage = memo((props: CreateProductPageProps) => {
                     <Button
                         className={cls.button}
                         onClick={() => navigate(`/`)}
+                        disabled={disableButton}
                     >Сохранить
                     </Button>
                 </FormInputProduct>

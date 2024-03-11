@@ -20,5 +20,12 @@ export const postApi = createApi({
         }),
             // providesTags: result => ["Post"]
         }),
+        getUnit: build.query<ProductTypes,Args>({
+            query:({param , source})=>({
+                url: `/${source}${param}` ,
+
+        }),
+            // providesTags: result => ["Post"]
+        }),
 })
 })
