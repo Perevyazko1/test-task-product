@@ -1,4 +1,4 @@
-import {memo, ReactNode} from 'react';
+import {memo, ReactNode, useState} from 'react';
 import {classNames, Mods} from "shared/lib/classNames/classNames";
 import cls from "./FormInputProduct.module.scss"
 import {Button, Col, Form, Row} from "react-bootstrap";
@@ -12,6 +12,15 @@ interface FormInputProductProps {
 
 
 export const FormInputProduct = memo((props: FormInputProductProps) => {
+    const [isInputQuantityEmpty, setIsInputQuantityEmpty] = useState(false)
+    const handleInputChangeQuantity = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.value.trim() === "") {
+            setIsInputQuantityEmpty(true);
+        } else {
+            setIsInputQuantityEmpty(false);
+        }
+    };
+
     const {
         className,
         children,
@@ -28,22 +37,26 @@ export const FormInputProduct = memo((props: FormInputProductProps) => {
         >
             <div className={cls.header}>{header}</div>
             <Form>
-                <Form.Group className="mt-5" as={Row} controlId="numericInput">
+                <Form.Group className="mt-5 " as={Row} controlId="numericInput">
                     <Form.Label column sm="3">Кол-во пачек *</Form.Label>
                     <Col sm="9">
-                        <Form.Control type="text" pattern="[0-9]*" inputMode="numeric"/>
+                        <Form.Control onChange={handleInputChangeQuantity} isInvalid={isInputQuantityEmpty} type="text"
+                                      pattern="[0-9]*" inputMode="numeric"/>
                     </Col>
                 </Form.Group>
 
                 <Form.Group className="mt-3" as={Row} controlId="singleLineText">
                     <Form.Label column sm="3">Тип упаковки *</Form.Label>
                     <Col sm="9">
-                        <Form.Control type="text"/>
+                        <Form.Select>
+                            <option value="">компрессия</option>
+                            <option value="option1">не компрессия</option>
+                        </Form.Select>
                     </Col>
                 </Form.Group>
                 <Form.Group as={Row} className="mt-3" controlId="formBasicCheckbox">
                     <Form.Label column sm="3">Архивировано</Form.Label>
-                    <Col className="mt-2"  sm="9">
+                    <Col className="mt-2" sm="9">
                         <Form.Check
                             type="checkbox"
                             // checked={isChecked}
