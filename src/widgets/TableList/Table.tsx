@@ -36,11 +36,10 @@ export const TableList = memo((props: TableProps) => {
     }, [product]);
 
     useEffect(() => {
-        console.log(data)
         data && dispatch(isProductType(data))
-    }, [data]);
+    }, [data, dispatch]);
     const handleConConfirmDelete = () => {
-        const {data, isLoading, error} = postApi.useGetDataQuery({param: "", source: "productTypes"});
+        // const {data, isLoading, error} = postApi.useGetDataQuery({param: "", source: "productTypes"});
     }
     const handleCloseModalConfirm = () => {
         setShowModalConfirm(false)
@@ -74,12 +73,12 @@ export const TableList = memo((props: TableProps) => {
                     <th>Тип упаковки</th>
                     <th>Дата создания</th>
                     <th>Статус</th>
-                    <th></th>
-                    <th></th>
+                    <th> </th>
+                    <th> </th>
                 </tr>
                 </thead>
                 <tbody>
-                {data && data
+                {product && product.product
                     .slice() // Создаем копию массива, чтобы избежать изменения исходных данных
                     .sort((a, b) => moment(b.createdAt).diff(moment(a.createdAt))) // Сортируем скопированный массив по дате создания
                     .map((item: ProductTypes, i) => (
