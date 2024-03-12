@@ -70,8 +70,8 @@ export const TableList = memo((props: TableProps) => {
                     <th>Тип упаковки</th>
                     <th>Дата создания</th>
                     <th>Статус</th>
-                    <th> </th>
-                    <th> </th>
+                    <th></th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -87,22 +87,24 @@ export const TableList = memo((props: TableProps) => {
                             <td>{item.isArchived ? 'Архив' : 'Активно'}</td>
                             <td><img src={question}
                                      alt="question"
-                                     onClick={()=>setShowModal(true)}
+                                     onClick={() => setShowModal(true)}
                             /></td>
                             <td>
-                                <img className={cls.pencil} onClick={() => navigate(`/edit_product/${item.id}`)} src={pencil}/>
-                                <img className={cls.delete} onClick={()=>setShowModalConfirm(true)} src={delete_icon}/>
+                                <img className={cls.pencil} onClick={() => navigate(`/edit_product/${item.id}`)}
+                                     src={pencil}/>
+                                <img className={cls.delete} onClick={() => setShowModalConfirm(true)}
+                                     src={delete_icon}/>
+                                <ModalTooltype
+                                    show={showModal}
+                                    onHide={handleCloseModal}
+                                >
+                                    <p>{item.packsNumber}</p>
+                                    <p>{item.packageType}</p>
+                                    <p>{item.isArchived}</p>
+                                    <p>{item.description}</p>
+                                    <p>{item.createdAt}</p>
+                                </ModalTooltype>
                             </td>
-                            <ModalTooltype
-                                show={showModal}
-                                onHide={handleCloseModal}
-                            >
-                                <p>{item.packsNumber}</p>
-                                <p>{item.packageType}</p>
-                                <p>{item.isArchived}</p>
-                                <p>{item.description}</p>
-                                <p>{item.createdAt}</p>
-                            </ModalTooltype>
                         </tr>
 
                     ))}

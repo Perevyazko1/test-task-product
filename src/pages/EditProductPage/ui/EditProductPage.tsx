@@ -25,9 +25,20 @@ const EditProductPage = memo((props: CreateProductPageProps) => {
 
         const {id} = useParams()
     const {data, isLoading, error} = postApi.useGetUnitQuery({param: "", source: `productTypes/${id}`});
+    const [updateUnit] = postApi.useUpdateUnitMutation()
     useEffect(() => {
         data && dispatch(typesEdit(data))
     }, [data]);
+    const updatePost = async () => {
+  if (product && id) {
+    try {
+      const result = await updateUnit({ id, product:product.product });
+      console.log('Успешно обновлено:', result);
+    } catch (error) {
+      console.error('Произошла ошибка при обновлении записи:', error);
+    }
+  }
+}
 
 
     const {
@@ -47,7 +58,7 @@ const EditProductPage = memo((props: CreateProductPageProps) => {
                 <FormInputProduct data={product} header={"Редактирование типа продукции"}>
                     <Button
                         className={classNames(cls.button, {}, ["mx-5"])}
-                        onClick={() => navigate(`/`)}
+                        onClick={updatePost}
                     >Создать
                     </Button>
                     <Button

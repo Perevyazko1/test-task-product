@@ -48,6 +48,24 @@ export const postApi = createApi({
             }),
             invalidatesTags: ['Post']
         }),
+        updateUnit: build.mutation<ProductTypes, { id:string, product: ProductTypes }>({
+            query: ({product, id}) => ({
+
+                url: `/productTypes/${id}`,
+                method: 'PATCH',
+                body: {
+                    "packsNumber": product.packsNumber,
+                    "packageType": product.packageType,
+                    "isArchived": product.isArchived,
+                    "description": product.description
+                },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            }),
+            invalidatesTags: ['Post']
+        }),
         deleteUnit: build.mutation<ProductTypes, { data: ProductTypes }>({
             query: ({data}) => ({
                 url: `/productTypes`,
