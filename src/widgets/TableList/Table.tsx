@@ -23,7 +23,7 @@ interface TableProps {
 
 export const TableList = memo((props: TableProps) => {
 
-    const [getData,{data, isLoading}] = postApi.useGetDataMutation();
+    const [getData, {data, isLoading}] = postApi.useGetDataMutation();
     const dispatch = useAppdispatch()
     const {isProductType} = ProductTypesSlice.actions
     const navigate = useNavigate()
@@ -31,15 +31,16 @@ export const TableList = memo((props: TableProps) => {
     const [showModal, setShowModal] = useState(false)
     const product = useAppSelector(state => state.ProductTypesSlice)
     const [deleteUnit] = postApi.useDeleteUnitMutation()
+    const [clickId, setClickId] = useState("")
 
 
     const fetchData = async () => {
-    try {
-         await getData({param: "", source: "productTypes"});
-    } catch (error) {
-        console.error(error);
-    }
-};
+        try {
+            await getData({param: "", source: "productTypes"});
+        } catch (error) {
+            console.error(error);
+        }
+    };
     useEffect(() => {
         fetchData()
     }, [showModalConfirm]);
@@ -107,31 +108,42 @@ export const TableList = memo((props: TableProps) => {
                             <td>{item.isArchived ? 'Архив' : 'Активно'}</td>
                             <td><img src={question}
                                      alt="question"
-                                     onClick={() => setShowModal(true)}
+                                     onClick={() => {setShowModal(true); setClickId(item.id)}}
                             /></td>
                             <td>
                                 <img className={cls.pencil} onClick={() => navigate(`/edit_product/${item.id}`)}
                                      src={pencil}/>
-                                <img className={cls.delete} onClick={() => setShowModalConfirm(true)}
+                                <img className={cls.delete} onClick={() => {setShowModalConfirm(true); setClickId(item.id)}}
                                      src={delete_icon}/>
-                                <ModalTooltype
-                                    show={showModal}
-                                    onHide={handleCloseModal}
-                                >
-                                    <p>{item.packsNumber}</p>
-                                    <p>{item.packageType}</p>
-                                    <p>{item.isArchived}</p>
-                                    <p>{item.description}</p>
-                                    <p>{item.createdAt}</p>
-                                </ModalTooltype>
-                                <Confirmation show={showModalConfirm} onHide={handleCloseModalConfirm}
-                                              conConfirm={() => deletePost(item.id)}/>
-
                             </td>
                         </tr>
-
                     ))}
+
                 </tbody>
+                <ModalTooltype
+                    show={showModal}
+                    onHide={handleCloseModal}
+                >
+                    {product && product.product
+                    .filter((item) => item.id === clickId)
+                        .map((i)=>(
+                            <>
+                                <p>Кол-во пачек: {i.packsNumber}</p>
+                                <p>Тип упаковки: {i.packageType}</p>
+                                 <p>Архив: {i.isArchived ? 'Архив' : 'Активно'}</p>
+                                 <p>Описание: {i.description}</p>
+                                 <p>Дата создания: {moment(i.createdAt).format("DD.MM.YYYY")}</p>
+
+                            </>
+                        ))
+
+                    }
+                </ModalTooltype>
+                <Confirmation show={showModalConfirm}
+                              onHide={handleCloseModalConfirm}
+                              conConfirm={() => deletePost(clickId)}
+                />
+
             </Table>
 
         }
