@@ -12,7 +12,7 @@ interface FormInputProductProps {
     className?: string
     children?: ReactNode
     header: string
-    data?: SliceProductEdit
+    data?: ProductTypes
 
 }
 
@@ -41,7 +41,7 @@ export const FormInputProduct = memo((props: FormInputProductProps) => {
     };
     useEffect(() => {
         if(data){
-            setValueInputPacksNumber(String(data?.product.packsNumber))
+            setValueInputPacksNumber(String(data?.packsNumber))
             setIsInputQuantityEmpty(false)
         }else {
             setIsInputQuantityEmpty(true)
@@ -81,7 +81,7 @@ export const FormInputProduct = memo((props: FormInputProductProps) => {
                     <Form.Label column sm="3">Тип упаковки *</Form.Label>
                     <Col sm="9">
                         <Form.Select
-                            value={data?.product.packageType}
+                            value={data?.packageType}
                             onChange={(event) => dispatch(packageType(event.target.value))}
 
                         >
@@ -95,7 +95,7 @@ export const FormInputProduct = memo((props: FormInputProductProps) => {
                     <Col className="mt-2" sm="9">
                         <Form.Check
                             type="checkbox"
-                            checked={data?.product.isArchived}
+                            checked={data?.isArchived}
                             onChange={(event) => dispatch(isArchived(event.target.checked))}
                         />
                     </Col>
@@ -106,7 +106,7 @@ export const FormInputProduct = memo((props: FormInputProductProps) => {
                         <Form.Control
                             as="textarea"
                             rows={3}
-                            value={data?.product.description}
+                            value={data?.description}
                             onChange={(event) => dispatch(description(event.target.value))}
 
                         />

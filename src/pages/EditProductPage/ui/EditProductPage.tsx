@@ -26,18 +26,18 @@ const EditProductPage = memo((props: CreateProductPageProps) => {
 
 
     const {id} = useParams()
-    const [getUnit,{data, isLoading}] = postApi.useGetUnitMutation();
+    const [getUnit, {data, isLoading}] = postApi.useGetUnitMutation();
     const [updateUnit] = postApi.useUpdateUnitMutation()
     const {resetToInitialState} = TypesEditSlice.actions
     const [deleteUnit] = postApi.useDeleteUnitMutation()
 
     useEffect(() => {
-        getUnit({ param: `${id}`, source: `productTypes/`})
+        getUnit({param: `${id}`, source: `productTypes/`})
     }, []);
 
 
     useEffect(() => {
-        data && dispatch(typesEdit(data))
+        data && !isLoading && dispatch(typesEdit(data))
     }, [data]);
     const updatePost = async () => {
         if (product && id) {
@@ -82,8 +82,8 @@ const EditProductPage = memo((props: CreateProductPageProps) => {
             <div
                 className={classNames(cls.EditProductPage, mods, [className])}
                 {...otherProps}
-            >
-                <FormInputProduct data={product} header={"Редактирование типа продукции"}>
+            >{isLoading? <p>Загрузка...</p> :
+                <FormInputProduct data={data} header={"Редактирование типа продукции"}>
                     <Button
                         className="mr-5"
                         variant="danger"
@@ -103,6 +103,9 @@ const EditProductPage = memo((props: CreateProductPageProps) => {
                     >Отмена
                     </Button>
                 </FormInputProduct>
+
+            }
+
                 <Confirmation show={showModalConfirm} onHide={handleCloseModalConfirm}
                               conConfirm={deletePost}/>
 
