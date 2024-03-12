@@ -28,22 +28,21 @@ export const FormInputProduct = memo((props: FormInputProductProps) => {
     const [isInputQuantityEmpty, setIsInputQuantityEmpty] = useState<boolean>()
 
 
-
     const handleInputChangeQuantity = (event: React.ChangeEvent<HTMLInputElement>) => {
         dispatch(packsNumber(Number(event.target.value)))
         setValueInputPacksNumber(String(event.target.value));
-        if(event.target.value === ""){
+        if (event.target.value === "") {
             setIsInputQuantityEmpty(true)
-        }else {
+        } else {
             setIsInputQuantityEmpty(false)
         }
 
     };
     useEffect(() => {
-        if(data){
+        if (data) {
             setValueInputPacksNumber(String(data?.packsNumber))
             setIsInputQuantityEmpty(false)
-        }else {
+        } else {
             setIsInputQuantityEmpty(true)
         }
     }, []);
@@ -74,6 +73,9 @@ export const FormInputProduct = memo((props: FormInputProductProps) => {
                                       value={valueInputPacksNumber}
 
                         />
+                        <Form.Control.Feedback type="invalid">
+                            Пожалуйста введите кол-во пачек
+                        </Form.Control.Feedback>
                     </Col>
                 </Form.Group>
 
