@@ -50,7 +50,6 @@ const CreateProductPage = memo((props: CreateProductPageProps) => {
         navigate(`/`)
     }
     useEffect(() => {
-        console.log(product.product.packsNumber)
         if (product.product.packsNumber === 0) {
             setDisableButton(true)
         } else {

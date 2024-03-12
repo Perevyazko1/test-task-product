@@ -20,6 +20,8 @@ interface CreateProductPageProps {
 const EditProductPage = memo((props: CreateProductPageProps) => {
     const navigate = useNavigate()
     const [showModalConfirm, setShowModalConfirm] = useState(false)
+    const [disableButton, setDisableButton] = useState(true)
+
 
     const dispatch = useAppdispatch()
     const product = useAppSelector(state => state.TypesEditSlice)
@@ -39,6 +41,14 @@ const EditProductPage = memo((props: CreateProductPageProps) => {
     useEffect(() => {
         data && !isLoading && dispatch(typesEdit(data))
     }, [data]);
+    useEffect(() => {
+        if (product.product.packsNumber === 0) {
+            setDisableButton(true)
+        } else {
+            setDisableButton(false)
+        }
+    }, [product.product.packsNumber]);
+
     const updatePost = async () => {
         if (product && id) {
             try {
@@ -82,7 +92,7 @@ const EditProductPage = memo((props: CreateProductPageProps) => {
             <div
                 className={classNames(cls.EditProductPage, mods, [className])}
                 {...otherProps}
-            >{isLoading? <p>Загрузка...</p> :
+            >{isLoading ? <p>Загрузка...</p> :
                 <FormInputProduct data={data} header={"Редактирование типа продукции"}>
                     <Button
                         className="mr-5"
@@ -94,6 +104,7 @@ const EditProductPage = memo((props: CreateProductPageProps) => {
                     <Button
                         className={classNames(cls.button, {}, ["mx-5"])}
                         onClick={updatePost}
+                        disabled={disableButton}
                     >Создать
                     </Button>
                     <Button
