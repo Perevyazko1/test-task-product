@@ -18,27 +18,26 @@ interface CreateProductPageProps {
 
 const EditProductPage = memo((props: CreateProductPageProps) => {
     const navigate = useNavigate()
-        const dispatch = useAppdispatch()
-        const product = useAppSelector(state => state.TypesEditSlice)
+    const dispatch = useAppdispatch()
+    const product = useAppSelector(state => state.TypesEditSlice)
 
 
-
-        const {id} = useParams()
+    const {id} = useParams()
     const {data, isLoading, error} = postApi.useGetUnitQuery({param: "", source: `productTypes/${id}`});
     const [updateUnit] = postApi.useUpdateUnitMutation()
     useEffect(() => {
         data && dispatch(typesEdit(data))
     }, [data]);
     const updatePost = async () => {
-  if (product && id) {
-    try {
-      const result = await updateUnit({ id, product:product.product });
-      console.log('Успешно обновлено:', result);
-    } catch (error) {
-      console.error('Произошла ошибка при обновлении записи:', error);
+        if (product && id) {
+            try {
+                await updateUnit({id, product: product.product});
+                navigate("/")
+            } catch (error) {
+                console.error('Произошла ошибка при обновлении записи:', error);
+            }
+        }
     }
-  }
-}
 
 
     const {

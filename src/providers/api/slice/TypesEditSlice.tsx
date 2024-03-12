@@ -38,6 +38,9 @@ export const TypesEditSlice = createSlice({
         description(state, action: PayloadAction<string>) {
             state.product.description = action.payload
         },
+        resetToInitialState(state) {
+            state.product = initialState.product; // Сбросить все поля к исходному initialState
+        },
 
     }
 })

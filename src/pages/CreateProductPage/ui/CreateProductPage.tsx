@@ -8,6 +8,8 @@ import {useNavigate} from "react-router-dom";
 import {Confirmation} from "../../../shared/ui/Confirmation/Confirmation";
 import {useAppSelector} from "../../../shared/lib/hooks/Redux/redux";
 import {postApi} from "../../../providers/api/RtkService";
+import {TypesEditSlice} from "../../../providers/api/slice/TypesEditSlice";
+import {useDispatch} from "react-redux";
 
 
 interface CreateProductPageProps {
@@ -17,16 +19,28 @@ interface CreateProductPageProps {
 
 
 const CreateProductPage = memo((props: CreateProductPageProps) => {
-    const [createUnit,{data, isLoading, error}]=postApi.useCreateUnitMutation()
+    const [createUnit, {data, isLoading, error}] = postApi.useCreateUnitMutation()
     const navigate = useNavigate()
     const [showModalConfirm, setShowModalConfirm] = useState(false)
     const product = useAppSelector(state => state.TypesEditSlice)
     const [disableButton, setDisableButton] = useState(true)
+    const dispatch = useDispatch()
+    const {resetToInitialState} = TypesEditSlice.actions
 
-    const createPost = async ()=>(
-        await product && createUnit(product)
-        // await navigate(`/`)
-    )
+    const createPost = async () => {
+
+        if (product) {
+            try {
+                await createUnit(product)
+                navigate("/")
+
+            } catch (error) {
+                console.error('Произошла ошибка при обновлении записи:', error);
+            }
+
+        }
+    }
+
     const handleConConfirmDelete = () => {
         navigate(`/`)
     }
@@ -67,7 +81,7 @@ const CreateProductPage = memo((props: CreateProductPageProps) => {
                     <Button
                         className="mx-5"
                         variant="dark"
-                        onClick={() => navigate(`/`)}
+                        onClick={() => {navigate(`/`); dispatch(resetToInitialState)}}
                     >Отмена
                     </Button>
                     <Button
