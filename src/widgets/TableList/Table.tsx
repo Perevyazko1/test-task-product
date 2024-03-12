@@ -29,15 +29,23 @@ export const TableList = memo((props: TableProps) => {
     const navigate = useNavigate()
     const [showModalConfirm, setShowModalConfirm] = useState(false)
     const [showModal, setShowModal] = useState(false)
-
     const product = useAppSelector(state => state.ProductTypesSlice)
+    const [deleteUnit] = postApi.useDeleteUnitMutation()
+
+    const deletePost = async (id: string) => {
+        try {
+            await id && deleteUnit(id);
+            setShowModalConfirm(false)
+        } catch (error) {
+            console.error('Произошла ошибка при обновлении записи:', error);
+
+        }
+    }
+
 
     useEffect(() => {
         data && dispatch(isProductType(data))
     }, [data, dispatch]);
-    const handleConConfirmDelete = () => {
-        // const {data, isLoading, error} = postApi.useGetDataQuery({param: "", source: "productTypes"});
-    }
     const handleCloseModalConfirm = () => {
         setShowModalConfirm(false)
     }
@@ -104,13 +112,15 @@ export const TableList = memo((props: TableProps) => {
                                     <p>{item.description}</p>
                                     <p>{item.createdAt}</p>
                                 </ModalTooltype>
+                                <Confirmation show={showModalConfirm} onHide={handleCloseModalConfirm}
+                                              conConfirm={()=>deletePost(item.id)}/>
+
                             </td>
                         </tr>
 
                     ))}
                 </tbody>
             </Table>
-            <Confirmation show={showModalConfirm} onHide={handleCloseModalConfirm} conConfirm={handleConConfirmDelete}/>
         </div>
 
     );

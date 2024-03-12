@@ -66,16 +66,10 @@ export const postApi = createApi({
             }),
             invalidatesTags: ['Post']
         }),
-        deleteUnit: build.mutation<ProductTypes, { data: ProductTypes }>({
-            query: ({data}) => ({
-                url: `/productTypes`,
+        deleteUnit: build.mutation<ProductTypes,  string >({
+            query: (id) => ({
+                url: `/productTypes/${id}`,
                 method: 'DELETE',
-                body: {
-                    "packsNumber": data.packsNumber,
-                    "packageType": data.packageType,
-                    "isArchived": data.isArchived,
-                    "description": data.description
-                },
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'

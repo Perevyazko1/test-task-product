@@ -7,7 +7,7 @@ interface ConfirmationProps {
     children?: ReactNode
     show: boolean
     onHide: () => void
-    conConfirm: () => void
+    conConfirm:() => void
 
 
 }
