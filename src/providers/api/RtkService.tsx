@@ -31,7 +31,6 @@ export const postApi = createApi({
         }),
         createUnit: build.mutation<ProductTypes, { product: ProductTypes }>({
             query: ({product}) => (
-                console.log( product.packageType),
                 {
 
                 url: `/productTypes`,

@@ -38,7 +38,7 @@ export const TableList = memo((props: TableProps) => {
         try {
             await getData({param: "", source: "productTypes"});
         } catch (error) {
-            console.error(error);
+            console.error('Произошла ошибка при обновлении записи:', error);
         }
     };
     useEffect(() => {
