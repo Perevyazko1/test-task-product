@@ -42,6 +42,7 @@ const CreateProductPage = memo((props: CreateProductPageProps) => {
     }
 
     const handleConConfirmDelete = () => {
+        dispatch(resetToInitialState)
         navigate(`/`)
     }
     const handleCloseModalConfirm = () => {

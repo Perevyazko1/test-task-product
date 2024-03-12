@@ -1,4 +1,4 @@
-import {memo, ReactNode, useEffect} from 'react';
+import {memo, ReactNode, useEffect, useState} from 'react';
 import {classNames, Mods} from "shared/lib/classNames/classNames";
 import {PageWrapper} from "../../../shared/ui/PageWrapper/PageWrapper";
 import {Button} from "react-bootstrap";
@@ -9,6 +9,7 @@ import {postApi} from "../../../providers/api/RtkService";
 import {typesEdit, TypesEditSlice} from "../../../providers/api/slice/TypesEditSlice";
 import {useAppdispatch, useAppSelector} from "../../../shared/lib/hooks/Redux/redux";
 import {ProductTypes} from "../../../providers/api/models/ProductTypes";
+import {Confirmation} from "../../../shared/ui/Confirmation/Confirmation";
 
 interface CreateProductPageProps {
     className?: string
@@ -18,6 +19,8 @@ interface CreateProductPageProps {
 
 const EditProductPage = memo((props: CreateProductPageProps) => {
     const navigate = useNavigate()
+    const [showModalConfirm, setShowModalConfirm] = useState(false)
+
     const dispatch = useAppdispatch()
     const product = useAppSelector(state => state.TypesEditSlice)
 
@@ -25,6 +28,10 @@ const EditProductPage = memo((props: CreateProductPageProps) => {
     const {id} = useParams()
     const {data, isLoading, error} = postApi.useGetUnitQuery({param: "", source: `productTypes/${id}`});
     const [updateUnit] = postApi.useUpdateUnitMutation()
+    const {resetToInitialState} = TypesEditSlice.actions
+    const [deleteUnit] = postApi.useDeleteUnitMutation()
+
+
     useEffect(() => {
         data && dispatch(typesEdit(data))
     }, [data]);
@@ -37,6 +44,24 @@ const EditProductPage = memo((props: CreateProductPageProps) => {
                 console.error('Произошла ошибка при обновлении записи:', error);
             }
         }
+    }
+    const deletePost = async () => {
+        if (id) {
+            try {
+                await deleteUnit(id);
+                dispatch(resetToInitialState)
+                navigate(`/`)
+            } catch (error) {
+                console.error('Произошла ошибка при обновлении записи:', error);
+
+            }
+
+        }
+    }
+
+    const handleCloseModalConfirm = () => {
+        setShowModalConfirm(false)
+        navigate(`/`)
     }
 
 
@@ -56,6 +81,13 @@ const EditProductPage = memo((props: CreateProductPageProps) => {
             >
                 <FormInputProduct data={product} header={"Редактирование типа продукции"}>
                     <Button
+                        className="mr-5"
+                        variant="danger"
+                        onClick={() => setShowModalConfirm(true)}
+                    >Удалить
+                    </Button>
+
+                    <Button
                         className={classNames(cls.button, {}, ["mx-5"])}
                         onClick={updatePost}
                     >Создать
@@ -67,6 +99,9 @@ const EditProductPage = memo((props: CreateProductPageProps) => {
                     >Отмена
                     </Button>
                 </FormInputProduct>
+                <Confirmation show={showModalConfirm} onHide={handleCloseModalConfirm}
+                              conConfirm={deletePost}/>
+
             </div>
 
         </PageWrapper>
