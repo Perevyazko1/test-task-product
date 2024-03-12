@@ -14,11 +14,12 @@ export const postApi = createApi({
     }),
     tagTypes: ['Post'],
     endpoints: (build) => ({
-        getData: build.query<ProductTypes[], Args>({
+        getData: build.mutation<ProductTypes[], Args>({
             query: ({param, source}) => ({
                 url: `/${source}${param}`,
 
             }),
+
             // providesTags: result => ["Post"]
         }),
         getUnit: build.query<ProductTypes, Args>({

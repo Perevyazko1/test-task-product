@@ -23,7 +23,7 @@ interface TableProps {
 
 export const TableList = memo((props: TableProps) => {
 
-    const {data, isLoading, error} = postApi.useGetDataQuery({param: "", source: "productTypes"});
+    const [getData,{data, isLoading}] = postApi.useGetDataMutation();
     const dispatch = useAppdispatch()
     const {isProductType} = ProductTypesSlice.actions
     const navigate = useNavigate()
@@ -31,6 +31,18 @@ export const TableList = memo((props: TableProps) => {
     const [showModal, setShowModal] = useState(false)
     const product = useAppSelector(state => state.ProductTypesSlice)
     const [deleteUnit] = postApi.useDeleteUnitMutation()
+
+
+    const fetchData = async () => {
+    try {
+         await getData({param: "", source: "productTypes"});
+    } catch (error) {
+        console.error(error);
+    }
+};
+    useEffect(() => {
+        fetchData()
+    }, [showModalConfirm]);
 
     const deletePost = async (id: string) => {
         try {
@@ -42,10 +54,9 @@ export const TableList = memo((props: TableProps) => {
         }
     }
 
-
     useEffect(() => {
         data && dispatch(isProductType(data))
-    }, [data, dispatch]);
+    }, [data]);
     const handleCloseModalConfirm = () => {
         setShowModalConfirm(false)
     }
@@ -66,7 +77,8 @@ export const TableList = memo((props: TableProps) => {
         <div
             className={classNames(cls.TableList, mods, [className])}
             {...otherProps}
-        >
+        >{isLoading ?
+            <p>Идет загрузка</p> :
             <Table
                 className={"table color: red; --bs-table-striped-color: red;"}
 
@@ -113,7 +125,7 @@ export const TableList = memo((props: TableProps) => {
                                     <p>{item.createdAt}</p>
                                 </ModalTooltype>
                                 <Confirmation show={showModalConfirm} onHide={handleCloseModalConfirm}
-                                              conConfirm={()=>deletePost(item.id)}/>
+                                              conConfirm={() => deletePost(item.id)}/>
 
                             </td>
                         </tr>
@@ -121,6 +133,8 @@ export const TableList = memo((props: TableProps) => {
                     ))}
                 </tbody>
             </Table>
+
+        }
         </div>
 
     );
