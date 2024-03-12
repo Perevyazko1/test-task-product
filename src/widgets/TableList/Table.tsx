@@ -108,45 +108,52 @@ export const TableList = memo((props: TableProps) => {
                             <td>{item.isArchived ? 'Архив' : 'Активно'}</td>
                             <td><img src={question}
                                      alt="question"
-                                     onClick={() => {setShowModal(true); setClickId(item.id)}}
+                                     onClick={() => {
+                                         setShowModal(true);
+                                         setClickId(item.id)
+                                     }}
                             /></td>
                             <td>
                                 <img className={cls.pencil} onClick={() => navigate(`/edit_product/${item.id}`)}
                                      src={pencil}/>
-                                <img className={cls.delete} onClick={() => {setShowModalConfirm(true); setClickId(item.id)}}
+                                <img className={cls.delete} onClick={() => {
+                                    setShowModalConfirm(true);
+                                    setClickId(item.id)
+                                }}
                                      src={delete_icon}/>
                             </td>
                         </tr>
                     ))}
 
                 </tbody>
-                <ModalTooltype
-                    show={showModal}
-                    onHide={handleCloseModal}
-                >
-                    {product && product.product
-                    .filter((item) => item.id === clickId)
-                        .map((i)=>(
-                            <>
-                                <p>Кол-во пачек: {i.packsNumber}</p>
-                                <p>Тип упаковки: {i.packageType}</p>
-                                 <p>Архив: {i.isArchived ? 'Архив' : 'Активно'}</p>
-                                 <p>Описание: {i.description}</p>
-                                 <p>Дата создания: {moment(i.createdAt).format("DD.MM.YYYY")}</p>
-
-                            </>
-                        ))
-
-                    }
-                </ModalTooltype>
-                <Confirmation show={showModalConfirm}
-                              onHide={handleCloseModalConfirm}
-                              conConfirm={() => deletePost(clickId)}
-                />
 
             </Table>
 
         }
+            <ModalTooltype
+                show={showModal}
+                onHide={handleCloseModal}
+            >
+                {product && product.product
+                    .filter((item) => item.id === clickId)
+                    .map((i) => (
+                        <div key={i.id}>
+                            <p>Кол-во пачек: {i.packsNumber}</p>
+                            <p>Тип упаковки: {i.packageType}</p>
+                            <p>Архив: {i.isArchived ? 'Архив' : 'Активно'}</p>
+                            <p>Описание: {i.description}</p>
+                            <p>Дата создания: {moment(i.createdAt).format("DD.MM.YYYY")}</p>
+
+                        </div>
+                    ))
+
+                }
+            </ModalTooltype>
+            <Confirmation show={showModalConfirm}
+                          onHide={handleCloseModalConfirm}
+                          conConfirm={() => deletePost(clickId)}
+            />
+
         </div>
 
     );

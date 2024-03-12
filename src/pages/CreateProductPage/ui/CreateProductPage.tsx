@@ -42,7 +42,7 @@ const CreateProductPage = memo((props: CreateProductPageProps) => {
     }
 
     const handleConConfirmDelete = () => {
-        dispatch(resetToInitialState)
+        dispatch(resetToInitialState())
         navigate(`/`)
     }
     const handleCloseModalConfirm = () => {
@@ -82,7 +82,7 @@ const CreateProductPage = memo((props: CreateProductPageProps) => {
                     <Button
                         className="mx-5"
                         variant="dark"
-                        onClick={() => {navigate(`/`); dispatch(resetToInitialState)}}
+                        onClick={() => {navigate(`/`); dispatch(resetToInitialState())}}
                     >Отмена
                     </Button>
                     <Button

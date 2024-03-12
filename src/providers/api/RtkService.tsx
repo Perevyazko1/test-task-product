@@ -22,7 +22,7 @@ export const postApi = createApi({
 
             // providesTags: result => ["Post"]
         }),
-        getUnit: build.query<ProductTypes, Args>({
+        getUnit: build.mutation<ProductTypes, Args>({
             query: ({param, source}) => ({
                 url: `/${source}${param}`,
 

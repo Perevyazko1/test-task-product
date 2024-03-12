@@ -24,20 +24,29 @@ export const FormInputProduct = memo((props: FormInputProductProps) => {
     const {packageType} = TypesEditSlice.actions
     const {isArchived} = TypesEditSlice.actions
     const {description} = TypesEditSlice.actions
+    const [valueInputPacksNumber, setValueInputPacksNumber] = useState("")
+    const [isInputQuantityEmpty, setIsInputQuantityEmpty] = useState<boolean>()
 
 
 
-
-    const [isInputQuantityEmpty, setIsInputQuantityEmpty] = useState(false)
     const handleInputChangeQuantity = (event: React.ChangeEvent<HTMLInputElement>) => {
         dispatch(packsNumber(Number(event.target.value)))
-
-        if (event.target.value.trim() === "") {
-            setIsInputQuantityEmpty(true);
-        } else {
-            setIsInputQuantityEmpty(false);
+        setValueInputPacksNumber(String(event.target.value));
+        if(event.target.value === ""){
+            setIsInputQuantityEmpty(true)
+        }else {
+            setIsInputQuantityEmpty(false)
         }
+
     };
+    useEffect(() => {
+        if(data){
+            setValueInputPacksNumber(String(data?.product.packsNumber))
+            setIsInputQuantityEmpty(false)
+        }else {
+            setIsInputQuantityEmpty(true)
+        }
+    }, []);
 
     const {
         className,
@@ -62,7 +71,7 @@ export const FormInputProduct = memo((props: FormInputProductProps) => {
                         <Form.Control onChange={handleInputChangeQuantity}
                                       isInvalid={isInputQuantityEmpty} type="text"
                                       pattern="[0-9]*" inputMode="numeric"
-                                      value={data && String(data?.product.packsNumber)}
+                                      value={valueInputPacksNumber}
 
                         />
                     </Col>

@@ -26,10 +26,14 @@ const EditProductPage = memo((props: CreateProductPageProps) => {
 
 
     const {id} = useParams()
-    const {data, isLoading, error} = postApi.useGetUnitQuery({param: "", source: `productTypes/${id}`});
+    const [getUnit,{data, isLoading}] = postApi.useGetUnitMutation();
     const [updateUnit] = postApi.useUpdateUnitMutation()
     const {resetToInitialState} = TypesEditSlice.actions
     const [deleteUnit] = postApi.useDeleteUnitMutation()
+
+    useEffect(() => {
+        getUnit({ param: `${id}`, source: `productTypes/`})
+    }, []);
 
 
     useEffect(() => {
@@ -49,7 +53,7 @@ const EditProductPage = memo((props: CreateProductPageProps) => {
         if (id) {
             try {
                 await deleteUnit(id);
-                dispatch(resetToInitialState)
+                dispatch(resetToInitialState())
                 navigate(`/`)
             } catch (error) {
                 console.error('Произошла ошибка при обновлении записи:', error);
