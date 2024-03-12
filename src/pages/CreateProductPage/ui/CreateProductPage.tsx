@@ -7,6 +7,7 @@ import {Button} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
 import {Confirmation} from "../../../shared/ui/Confirmation/Confirmation";
 import {useAppSelector} from "../../../shared/lib/hooks/Redux/redux";
+import {postApi} from "../../../providers/api/RtkService";
 
 
 interface CreateProductPageProps {
@@ -16,11 +17,16 @@ interface CreateProductPageProps {
 
 
 const CreateProductPage = memo((props: CreateProductPageProps) => {
+    const [createUnit,{data, isLoading, error}]=postApi.useCreateUnitMutation()
     const navigate = useNavigate()
     const [showModalConfirm, setShowModalConfirm] = useState(false)
     const product = useAppSelector(state => state.TypesEditSlice)
     const [disableButton, setDisableButton] = useState(true)
 
+    const createPost = async ()=>(
+        await product && createUnit(product)
+        // await navigate(`/`)
+    )
     const handleConConfirmDelete = () => {
         navigate(`/`)
     }
@@ -66,7 +72,7 @@ const CreateProductPage = memo((props: CreateProductPageProps) => {
                     </Button>
                     <Button
                         className={cls.button}
-                        onClick={() => navigate(`/`)}
+                        onClick={createPost}
                         disabled={disableButton}
                     >Сохранить
                     </Button>

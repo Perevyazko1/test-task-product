@@ -28,15 +28,18 @@ export const postApi = createApi({
             }),
             // providesTags: result => ["Post"]
         }),
-        createUnit: build.mutation<ProductTypes, { data: ProductTypes }>({
-            query: ({data}) => ({
+        createUnit: build.mutation<ProductTypes, { product: ProductTypes }>({
+            query: ({product}) => (
+                console.log( product.packageType),
+                {
+
                 url: `/productTypes`,
                 method: 'POST',
                 body: {
-                    "packsNumber": data.packsNumber,
-                    "packageType": data.packageType,
-                    "isArchived": data.isArchived,
-                    "description": data.description
+                    "packsNumber": product.packsNumber,
+                    "packageType": product.packageType,
+                    "isArchived": product.isArchived,
+                    "description": product.description
                 },
                 headers: {
                     'Content-Type': 'application/json',
